@@ -23,6 +23,23 @@ import tensorflow as tf
 
 from tf_model import tf_model
 
+
+import subprocess
+import json
+
+DEFAULT_ATTRIBUTES = (
+    'index',
+    'uuid',
+    'name',
+    'timestamp',
+    'memory.total',
+    'memory.free',
+    'memory.used',
+    'utilization.gpu',
+    'utilization.memory'
+)
+
+
 def data_load(train_dir):
     X_train = np.load(os.path.join(train_dir, 'train.npz'))['image']
     y_train = np.load(os.path.join(train_dir, 'train.npz'))['label']
@@ -51,22 +68,44 @@ def main(args):
               callbacks=callbacks)
     
     model.evaluate(X_test, y_test)
+    
+    
 
 if __name__ == '__main__':
-    print(sys.version)
     parser = argparse.ArgumentParser()
     
+    # SageMaker SDK の Estimator で定義されたハイパーパラメータ
     parser.add_argument('--batch_size',
                         type=int,
                         default=128)
     parser.add_argument('--epochs',
                         type=int,
                         default=12)
+    
+    
+    # SageMaker 学習用インスタンスが S3 とデータなどを共有する際のパスを環境変数から受け取っている
+    # SM_MODEL_DIR /opt/ml/model
     parser.add_argument('--model_dir',
                         type=str,
                         default=os.environ['SM_MODEL_DIR'])
+    
+    # SM_CHANNEL_TRAIN /opt/ml/input/data/train
     parser.add_argument('--train',
                         type=str,
                         default=os.environ['SM_CHANNEL_TRAIN'])
+
+    
     args = parser.parse_args()
     main(args)
+    
+    
+    
+        
+    parser.add_argument('--n_components', type=int, default=10)
+    parser.add_argument('--max_iter', type=int, default=200)
+    parser.add_argument('--random_state', type=int, default=1)
+
+    # SageMaker 固有の引数。環境変数にはデフォルト値が設定されています。
+    parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
+    parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
+    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
