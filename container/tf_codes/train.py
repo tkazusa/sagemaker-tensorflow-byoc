@@ -97,15 +97,3 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     main(args)
-    
-    
-    
-        
-    parser.add_argument('--n_components', type=int, default=10)
-    parser.add_argument('--max_iter', type=int, default=200)
-    parser.add_argument('--random_state', type=int, default=1)
-
-    # SageMaker 固有の引数。環境変数にはデフォルト値が設定されています。
-    parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
-    parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
