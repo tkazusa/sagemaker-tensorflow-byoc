@@ -2,7 +2,7 @@ import numpy as np
 
 import tensorflow as tf
 
-def tf_model():
+def tf_model(optimizer='adam'):
     model = tf.keras.models.Sequential(
         [
             tf.keras.layers.Flatten(input_shape=(28, 28)),
@@ -13,7 +13,7 @@ def tf_model():
     )
 
     model.compile(
-        optimizer='adam',
+        optimizer=optimizer,
         loss='sparse_categorical_crossentropy',
         metrics=['accuracy']
     )
