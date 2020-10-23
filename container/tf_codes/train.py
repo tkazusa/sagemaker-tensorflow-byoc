@@ -54,7 +54,7 @@ def main(args):
     
     X_train, y_train, X_test, y_test = data_load(train_dir)    
     
-    model = tf_model()
+    model = tf_model(args.optimizer)
 
     callbacks = []    
     callbacks.append(
@@ -81,7 +81,10 @@ if __name__ == '__main__':
     parser.add_argument('--epochs',
                         type=int,
                         default=12)
-    
+    parser.add_argument('--optimizer',
+                        type=str,
+                        default = "adam"
+                       )
     
     # SageMaker 学習用インスタンスが S3 とデータなどを共有する際のパスを環境変数から受け取っている
     # SM_MODEL_DIR /opt/ml/model
